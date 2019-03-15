@@ -1,0 +1,88 @@
+//////////////////////////////////////////////Project1////////////////////////////////////////
+#include"stdafx.h"
+#include<iostream>
+#include<highgui.hpp>
+//#include<cv.hpp>
+//#include<imgproc.hpp>
+#include<opencv2/opencv.hpp>
+#include<opencv2/core/core.hpp>
+#include<opencv2/imgproc/imgproc.hpp>
+int main()
+{
+	Mat test1, test2,test1_out,test2_out,test1_out_M,test2_out_M;
+	test1 = imread("G:\\图像视频处理\\第四次作业\\第4-次作业\\test1.pgm");
+	test2 = imread("G:\\图像视频处理\\第四次作业\\第4-次作业\\test2.tif");
+	GaussianBlur(test1,test1_out,Size(7,7),1.5);
+	GaussianBlur(test2, test2_out, Size(7,7), 1.5);
+	medianBlur(test1, test1_out_M, 7);
+	medianBlur(test2, test2_out_M, 7);
+	namedWindow("test1_out", 0);
+	namedWindow("test2_out", 0);
+	namedWindow("test1_out_M",0);
+	namedWindow("test2_out_M",0);
+
+	imshow("test1_out",test1_out);
+	imshow("test2_out", test2_out);
+
+	imshow("test1_out_M", test1_out_M);
+	imshow("test2_out_M", test2_out_M);
+
+	waitKey();
+	return 0;
+}
+//////////////////////////////////////////////Project2////////////////////////////////////////
+#include"stdafx.h"
+#include<iostream>
+#include<highgui.hpp>
+//#include<cv.hpp>
+//#include<imgproc.hpp>
+#include<opencv2/opencv.hpp>
+#include<opencv2/core/core.hpp>
+#include<opencv2/imgproc/imgproc.hpp>
+int main()
+{
+	Mat test3, test4, test3_Unsharp, test3_Sobel, test3_Sobel_y, test3_L, test3_Canny, test4_Unsharp, test4_Sobel, test4_Sobel_y,test4_L, test4_Canny;
+	test3 = imread("G:\\图像视频处理\\第四次作业\\第4-次作业\\test3_corrupt.pgm");
+	test4 = imread("G:\\图像视频处理\\第四次作业\\第4-次作业\\test4.tif");
+
+    cvtColor(test3, test3, COLOR_BGR2GRAY);
+	cvtColor(test4, test4, COLOR_BGR2GRAY);
+
+
+
+	Mat Sobel1, Sobel2,Sobel3,Sobel4;
+	test3_Unsharp=unsharp_masking(test3);
+	test4_Unsharp=unsharp_masking(test4);
+	Canny(test3, test3_Canny,50, 150);
+	Canny(test4, test4_Canny,50, 150);
+	Sobel(test3, test3_Sobel, CV_16S, 1, 0);
+	Sobel(test4, test4_Sobel, CV_16S,1, 0);
+	Sobel(test3, test3_Sobel_y, CV_16S, 0, 1);
+	Sobel(test4, test4_Sobel_y, CV_16S,0, 1);
+	convertScaleAbs(test3_Sobel, Sobel1);
+	convertScaleAbs(test3_Sobel_y, Sobel3);
+	convertScaleAbs(test4_Sobel, Sobel2);
+	convertScaleAbs(test4_Sobel_y, Sobel4);
+	addWeighted(Sobel1, 0.5, Sobel3, 0.5,0, test3_Sobel);
+	addWeighted(Sobel2, 0.5, Sobel4, 0.5, 0, test4_Sobel);
+	Laplacian(test3, test3_L,0);
+	Laplacian(test4, test4_L, 0);
+	namedWindow("test3_Unsharp", 0);
+	namedWindow("test4_Unsharp", 0);
+	namedWindow("test3_Canny", 0);
+	namedWindow("test4_Canny", 0);
+	namedWindow("test3_Sobel", 0);
+	namedWindow("test4_Sobel", 0);
+	namedWindow("test3_L", 0);
+	namedWindow("test4_L", 0);
+	imshow("test3_Unsharp", test3_Unsharp);
+	imshow("test4_Unsharp", test4_Unsharp);
+	imshow("test3_Canny", test3_Canny);
+	imshow("test4_Canny", test4_Canny);
+	imshow("test3_Sobel", test3_Sobel);
+	imshow("test4_Sobel", test4_Sobel);
+	imshow("test3_L", test3_L);
+	imshow("test4_L", test4_L);
+	waitKey();
+	return 0;
+}
