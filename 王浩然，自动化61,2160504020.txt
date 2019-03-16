@@ -10,8 +10,8 @@
 int main()
 {
 	Mat test1, test2,test1_out,test2_out,test1_out_M,test2_out_M;
-	test1 = imread("G:\\Í¼ÏñÊÓÆµ´¦Àí\\µÚËÄ´Î×÷Òµ\\µÚ4-´Î×÷Òµ\\test1.pgm");
-	test2 = imread("G:\\Í¼ÏñÊÓÆµ´¦Àí\\µÚËÄ´Î×÷Òµ\\µÚ4-´Î×÷Òµ\\test2.tif");
+	test1 = imread("G:\\å›¾åƒè§†é¢‘å¤„ç†\\ç¬¬å››æ¬¡ä½œä¸š\\ç¬¬4-æ¬¡ä½œä¸š\\test1.pgm");
+	test2 = imread("G:\\å›¾åƒè§†é¢‘å¤„ç†\\ç¬¬å››æ¬¡ä½œä¸š\\ç¬¬4-æ¬¡ä½œä¸š\\test2.tif");
 	GaussianBlur(test1,test1_out,Size(7,7),1.5);
 	GaussianBlur(test2, test2_out, Size(7,7), 1.5);
 	medianBlur(test1, test1_out_M, 7);
@@ -39,11 +39,32 @@ int main()
 #include<opencv2/opencv.hpp>
 #include<opencv2/core/core.hpp>
 #include<opencv2/imgproc/imgproc.hpp>
+Mat unsharp_masking(Mat matSrc)
+{
+	int nHeight = matSrc.rows;
+	int nWidth = matSrc.cols;
+	//matRet = Mat::zeros(nHeight, nWidth, CV_8UC1);
+
+	Mat matRet,Blur;
+	matRet = matSrc.clone();
+	GaussianBlur(matSrc, Blur, Size(3, 3), 0, 0);
+
+	for (int j = 0; j < nHeight; j++)
+	{
+		for (int i = 0; i < nWidth; i++)
+		{
+
+			matRet.at<uchar>(j, i) = 2 * matSrc.at<uchar>(j, i) - Blur.at<uchar>(j, i);
+		}
+	}
+
+	return matRet;
+}
 int main()
 {
 	Mat test3, test4, test3_Unsharp, test3_Sobel, test3_Sobel_y, test3_L, test3_Canny, test4_Unsharp, test4_Sobel, test4_Sobel_y,test4_L, test4_Canny;
-	test3 = imread("G:\\Í¼ÏñÊÓÆµ´¦Àí\\µÚËÄ´Î×÷Òµ\\µÚ4-´Î×÷Òµ\\test3_corrupt.pgm");
-	test4 = imread("G:\\Í¼ÏñÊÓÆµ´¦Àí\\µÚËÄ´Î×÷Òµ\\µÚ4-´Î×÷Òµ\\test4.tif");
+	test3 = imread("G:\\å›¾åƒè§†é¢‘å¤„ç†\\ç¬¬å››æ¬¡ä½œä¸š\\ç¬¬4-æ¬¡ä½œä¸š\\test3_corrupt.pgm");
+	test4 = imread("G:\\å›¾åƒè§†é¢‘å¤„ç†\\ç¬¬å››æ¬¡ä½œä¸š\\ç¬¬4-æ¬¡ä½œä¸š\\test4.tif");
 
     cvtColor(test3, test3, COLOR_BGR2GRAY);
 	cvtColor(test4, test4, COLOR_BGR2GRAY);
